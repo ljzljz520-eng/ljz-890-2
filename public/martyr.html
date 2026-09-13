@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英烈事迹 - 英烈纪念园</title>
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<div class="container">
+  <p class="crumb"><a href="/">首页</a> / <a href="/martyrs.html">英烈名录</a> / <span id="crumb-name">英烈事迹</span></p>
+  <div id="profile-wrap"></div>
+
+  <div class="detail-section" id="sec-bio" style="display:none">
+    <h3>生平简介</h3>
+    <p class="prose" id="bio"></p>
+  </div>
+
+  <div class="detail-section" id="sec-deeds" style="display:none">
+    <h3>英雄事迹</h3>
+    <p class="prose" id="deeds"></p>
+  </div>
+
+  <div class="detail-section" id="sec-photos" style="display:none">
+    <h3>珍贵影像</h3>
+    <div class="photo-grid" id="photo-grid"></div>
+  </div>
+
+  <div class="detail-section" id="sec-docs" style="display:none">
+    <h3>相关文献</h3>
+    <div id="doc-list"></div>
+  </div>
+
+  <div class="detail-section">
+    <h3>寄语留言</h3>
+    <div class="audit-notice">您提交的寄语需经管理员审核后才会公开展示，请文明留言。</div>
+    <div class="msg-form">
+      <div class="row"><label>您的姓名或称谓</label><input id="msg-author" maxlength="30" placeholder="如：市民 王先生"></div>
+      <div class="row"><label>寄语内容</label><textarea id="msg-content" maxlength="500" placeholder="写下您的哀思与敬意……"></textarea></div>
+      <button class="btn" id="msg-submit">提交寄语</button>
+      <span id="msg-tip" style="margin-left:12px;color:var(--red)"></span>
+    </div>
+    <div class="msg-list" id="msg-list"></div>
+  </div>
+</div>
+
+<footer id="site-footer"></footer>
+<script src="/js/common.js"></script>
+<script>
+const id = new URLSearchParams(location.search).get('id');
+let martyr = null;
+
+async function load(){
+  martyr = await fetchJSON('/api/martyrs/'+id);
+  document.title = martyr.name + ' - 英烈纪念园';
+  document.getElementById('crumb-name').textContent = martyr.name;
+  document.getElementById('profile-wrap').innerHTML = `
+    <div class="profile">
+      <div class="portrait">${portraitImg(martyr.portrait, martyr.name)}</div>
+      <div class="profile-info">
+        <h2>${esc(martyr.name)}</h2>
+        <p class="dates">${esc(fmtDate(martyr.birth_date))} — ${esc(fmtDate(martyr.death_date))}</p>
+        <table class="info-table">
+          ${martyr.gender?`<tr><td>性　别</td><td>${esc(martyr.gender)}</td></tr>`:''}
+          ${martyr.birthplace?`<tr><td>籍　贯</td><td>${esc(martyr.birthplace)}</td></tr>`:''}
+          ${martyr.title?`<tr><td>身　份</td><td>${esc(martyr.title)}</td></tr>`:''}
+        </table>
+        ${martyr.memorial_date?`<div class="memorial-box">🕯️ 纪念时间：${esc(martyr.memorial_date)}</div>`:''}
+        <div class="tribute-bar">
+          <button class="tribute-btn" id="btn-flower"><span class="ico">🌼</span>献花 <b id="flowers">${martyr.flowers}</b></button>
+          <button class="tribute-btn" id="btn-candle"><span class="ico">🕯️</span>点烛 <b id="candles">${martyr.candles}</b></button>
+        </div>
+      </div>
+    </div>`;
+
+  if(martyr.biography){ document.getElementById('sec-bio').style.display=''; document.getElementById('bio').textContent = martyr.biography; }
+  if(martyr.deeds){ document.getElementById('sec-deeds').style.display=''; document.getElementById('deeds').textContent = martyr.deeds; }
+  if(martyr.photos.length){
+    document.getElementById('sec-photos').style.display='';
+    document.getElementById('photo-grid').innerHTML = martyr.photos.map(p=>`
+      <figure class="photo-item"><img src="${esc(p.filename)}" alt="${esc(p.caption||'历史照片')}" onerror="this.onerror=null;this.src='${PLACEHOLDER_IMG}'">
+      <figcaption>${esc(p.caption||'历史照片')}</figcaption></figure>`).join('');
+  }
+  if(martyr.documents.length){
+    document.getElementById('sec-docs').style.display='';
+    document.getElementById('doc-list').innerHTML = martyr.documents.map(d=>`
+      <div class="doc-item">
+        <div class="doc-head" onclick="this.parentNode.classList.toggle('open')">
+          <span class="doc-cat">${esc(d.category)}</span><h4>${esc(d.title)}</h4><span class="arrow">▶</span>
+        </div>
+        <div class="doc-body"><p class="prose">${esc(d.content)}</p><p class="doc-meta">收录时间：${esc(d.created_at)}</p></div>
+      </div>`).join('');
+  }
+
+  bindTribute('btn-flower','flower');
+  bindTribute('btn-candle','candle');
+  loadMessages();
+}
+
+function bindTribute(btnId, type){
+  const key = 'tribute_'+type+'_'+id;
+  const btn = document.getElementById(btnId);
+  if(localStorage.getItem(key)) btn.disabled = true;
+  btn.onclick = async ()=>{
+    btn.disabled = true;
+    try{
+      const r = await fetchJSON('/api/martyrs/'+id+'/tribute', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({type})
+      });
+      document.getElementById('flowers').textContent = r.flowers;
+      document.getElementById('candles').textContent = r.candles;
+      localStorage.setItem(key,'1');
+    }catch(e){ btn.disabled = false; alert(e.message); }
+  };
+}
+
+async function loadMessages(){
+  const list = await fetchJSON('/api/messages?martyr_id='+id);
+  document.getElementById('msg-list').innerHTML = list.map(g=>`
+    <div class="msg-item">
+      <p class="content">${esc(g.content)}</p>
+      <p class="meta"><span class="who">—— ${esc(g.author)}</span><span>${esc(g.created_at)}</span></p>
+    </div>`).join('') || '<p class="empty-tip">暂无寄语，来写下第一份哀思</p>';
+}
+
+(async function(){
+  await initLayout('/martyrs.html');
+  if(!id){ location.href='/martyrs.html'; return; }
+  await load();
+  document.getElementById('msg-submit').onclick = async ()=>{
+    const tip = document.getElementById('msg-tip');
+    tip.textContent = '';
+    try{
+      const r = await fetchJSON('/api/messages', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          martyr_id: Number(id),
+          author: document.getElementById('msg-author').value,
+          content: document.getElementById('msg-content').value,
+        })
+      });
+      document.getElementById('msg-author').value='';
+      document.getElementById('msg-content').value='';
+      tip.textContent = r.message;
+    }catch(e){ tip.textContent = e.message; }
+  };
+})().catch(e=>{
+  document.getElementById('profile-wrap').innerHTML = '<p class="empty-tip">'+(e.message||'加载失败')+'</p>';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "memorial-site",
+  "version": "1.0.0",
+  "description": "烈士纪念资料站（英烈纪念园）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.22.2",
+    "multer": "^2.3.0",
+    "sql.js": "^1.14.2"
+  }
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英烈纪念园</title>
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<section class="hero">
+  <div class="star">★ ★ ★</div>
+  <h2>人民英雄永垂不朽</h2>
+  <p>每一方纪念碑，每一座烈士墓，每一段英雄故事，都是永不熄灭的精神火炬</p>
+  <svg class="monument" viewBox="0 0 280 150" aria-hidden="true">
+    <rect x="20" y="138" width="240" height="10" fill="#57503f"/>
+    <rect x="40" y="128" width="200" height="10" fill="#655d49"/>
+    <rect x="60" y="118" width="160" height="10" fill="#716a53"/>
+    <path d="M118 118 L118 44 L124 44 L124 34 L132 34 L132 24 L140 10 L148 24 L148 34 L156 34 L156 44 L162 44 L162 118 Z" fill="#7d765e"/>
+    <path d="M140 54 l3 6.4 7 .8-5.2 4.8 1.4 6.9-6.2-3.5-6.2 3.5 1.4-6.9-5.2-4.8 7-.8z" fill="#a89f80"/>
+    <rect x="128" y="92" width="24" height="20" fill="#6a6349"/>
+  </svg>
+  <div class="candle-line">
+    <span>🌼 累计献花<b id="hero-flowers">0</b></span>
+    <span>🕯️ 累计点烛<b id="hero-candles">0</b></span>
+  </div>
+</section>
+
+<section class="stats" id="stats"></section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">英烈名录</h2>
+    <p class="section-sub">青山有幸埋忠骨</p>
+    <div class="martyr-grid" id="martyr-grid"></div>
+    <p style="text-align:center;margin-top:28px"><a class="btn ghost" href="/martyrs.html">查看全部名录</a></p>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">最新寄语</h2>
+    <p class="section-sub">哀思寄英烈</p>
+    <div id="msg-list"></div>
+    <p style="text-align:center;margin-top:24px"><a class="btn" href="/messages.html">写下我的寄语</a></p>
+  </div>
+</section>
+
+<footer id="site-footer"></footer>
+<script src="/js/common.js"></script>
+<script>
+(async function(){
+  await initLayout('/');
+  const stats = await fetchJSON('/api/stats');
+  document.getElementById('hero-flowers').textContent = stats.flowers;
+  document.getElementById('hero-candles').textContent = stats.candles;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><b>${stats.martyrs}</b><span>收录英烈</span></div>
+    <div class="stat"><b>${stats.documents}</b><span>文献资料</span></div>
+    <div class="stat"><b>${stats.messages}</b><span>公开寄语</span></div>`;
+
+  const martyrs = await fetchJSON('/api/martyrs');
+  document.getElementById('martyr-grid').innerHTML = martyrs.slice(0,8).map(m=>`
+    <a class="martyr-card" href="/martyr.html?id=${m.id}">
+      <div class="portrait">${portraitImg(m.portrait, m.name)}</div>
+      <h3>${esc(m.name)}</h3>
+      <p class="dates">${esc(fmtDate(m.birth_date))} — ${esc(fmtDate(m.death_date))}</p>
+      <p class="title">${esc(m.title)}</p>
+      <p class="memorial">纪念时间：${esc(m.memorial_date || '—')}</p>
+      <p class="tribute-mini">🌼 ${m.flowers} &nbsp; 🕯️ ${m.candles}</p>
+    </a>`).join('') || '<p class="empty-tip">暂无收录</p>';
+
+  const msgs = await fetchJSON('/api/messages');
+  document.getElementById('msg-list').innerHTML = msgs.slice(0,5).map(g=>`
+    <div class="msg-item">
+      <p class="content">${esc(g.content)}</p>
+      <p class="meta"><span class="who">—— ${esc(g.author)}</span>
+      <span>${g.martyr_name ? '致 '+esc(g.martyr_name)+' · ' : ''}${esc(g.created_at)}</span></p>
+    </div>`).join('') || '<p class="empty-tip">暂无公开寄语</p>';
+})().catch(e=>console.error(e));
+</script>
+</body>
+</html>

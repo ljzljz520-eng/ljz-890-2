@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 150">
+  <rect width="120" height="150" fill="#e6e0d1"/>
+  <rect x="8" y="8" width="104" height="134" fill="none" stroke="#c9bfa5" stroke-width="1.5"/>
+  <path d="M60 96 L46 96 L50 60 L54 60 L53 44 L57 44 L57 36 L60 30 L63 36 L63 44 L67 44 L66 60 L70 60 L74 96 Z" fill="#b3a98d"/>
+  <rect x="40" y="96" width="40" height="6" fill="#a3987c"/>
+  <rect x="36" y="102" width="48" height="6" fill="#b3a98d"/>
+  <path d="M60 108 l2.2 4.7 5.2.6 -3.9 3.6 1.1 5.1 -4.6-2.6 -4.6 2.6 1.1-5.1 -3.9-3.6 5.2-.6 z" fill="#8f8264"/>
+  <text x="60" y="136" text-anchor="middle" font-size="9" fill="#8f8264" font-family="serif">英烈千古</text>
+</svg>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英烈名录 - 英烈纪念园</title>
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">英烈名录</h2>
+    <p class="section-sub">英名垂青史 浩气贯长虹</p>
+    <div class="search-bar">
+      <input id="q" type="text" placeholder="搜索姓名、籍贯、身份……">
+      <button class="btn" id="search-btn">搜 索</button>
+    </div>
+    <div class="martyr-grid" id="martyr-grid"></div>
+  </div>
+</section>
+
+<footer id="site-footer"></footer>
+<script src="/js/common.js"></script>
+<script>
+async function load(q){
+  const list = await fetchJSON('/api/martyrs' + (q ? '?q='+encodeURIComponent(q) : ''));
+  document.getElementById('martyr-grid').innerHTML = list.map(m=>`
+    <a class="martyr-card" href="/martyr.html?id=${m.id}">
+      <div class="portrait">${portraitImg(m.portrait, m.name)}</div>
+      <h3>${esc(m.name)}</h3>
+      <p class="dates">${esc(fmtDate(m.birth_date))} — ${esc(fmtDate(m.death_date))}</p>
+      <p class="title">${esc(m.title)}</p>
+      <p class="memorial">纪念时间：${esc(m.memorial_date || '—')}</p>
+      <p class="tribute-mini">🌼 ${m.flowers} &nbsp; 🕯️ ${m.candles}</p>
+    </a>`).join('') || '<p class="empty-tip">未找到相关人物</p>';
+}
+(async function(){
+  await initLayout('/martyrs.html');
+  await load('');
+  const input = document.getElementById('q');
+  document.getElementById('search-btn').onclick = ()=>load(input.value.trim());
+  input.addEventListener('keydown', e=>{ if(e.key==='Enter') load(input.value.trim()); });
+})().catch(e=>console.error(e));
+</script>
+</body>
+</html>

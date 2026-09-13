@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>留言寄语 - 英烈纪念园</title>
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">留言寄语</h2>
+    <p class="section-sub">一束鲜花寄哀思 万缕深情慰忠魂</p>
+
+    <div style="max-width:680px;margin:0 auto">
+      <div class="audit-notice">您提交的寄语需经管理员审核后才会公开展示，请文明留言，共同维护庄重肃穆的纪念氛围。</div>
+      <div class="msg-form">
+        <div class="row"><label>您的姓名或称谓</label><input id="msg-author" maxlength="30" placeholder="如：学生 李华"></div>
+        <div class="row"><label>寄语对象（可不选，默认为全体英烈）</label>
+          <select id="msg-martyr"><option value="">全体英烈</option></select>
+        </div>
+        <div class="row"><label>寄语内容</label><textarea id="msg-content" maxlength="500" placeholder="写下您的哀思与敬意……"></textarea></div>
+        <button class="btn" id="msg-submit">提交寄语</button>
+        <span id="msg-tip" style="margin-left:12px;color:var(--red)"></span>
+      </div>
+    </div>
+
+    <div class="msg-list" id="msg-list"></div>
+  </div>
+</section>
+
+<footer id="site-footer"></footer>
+<script src="/js/common.js"></script>
+<script>
+async function loadMessages(){
+  const list = await fetchJSON('/api/messages');
+  document.getElementById('msg-list').innerHTML = list.map(g=>`
+    <div class="msg-item">
+      <p class="content">${esc(g.content)}</p>
+      <p class="meta"><span class="who">—— ${esc(g.author)}</span>
+      <span>${g.martyr_name ? '致 '+esc(g.martyr_name)+' · ' : ''}${esc(g.created_at)}</span></p>
+    </div>`).join('') || '<p class="empty-tip">暂无公开寄语</p>';
+}
+(async function(){
+  await initLayout('/messages.html');
+  const martyrs = await fetchJSON('/api/martyrs');
+  document.getElementById('msg-martyr').innerHTML =
+    '<option value="">全体英烈</option>' +
+    martyrs.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join('');
+  await loadMessages();
+  document.getElementById('msg-submit').onclick = async ()=>{
+    const tip = document.getElementById('msg-tip');
+    tip.textContent = '';
+    try{
+      const r = await fetchJSON('/api/messages', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          martyr_id: document.getElementById('msg-martyr').value || null,
+          author: document.getElementById('msg-author').value,
+          content: document.getElementById('msg-content').value,
+        })
+      });
+      document.getElementById('msg-author').value='';
+      document.getElementById('msg-content').value='';
+      tip.textContent = r.message;
+    }catch(e){ tip.textContent = e.message; }
+  };
+})().catch(e=>console.error(e));
+</script>
+</body>
+</html>

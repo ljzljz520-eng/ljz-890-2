@@ -1,0 +1,247 @@
+/* ===== 英烈纪念园 · 庄重风格 ===== */
+:root{
+  --ink:#26221c;
+  --ink-light:#6b6455;
+  --paper:#f6f3ec;
+  --paper-deep:#efe9db;
+  --red:#7a1f1f;
+  --red-dark:#5c1515;
+  --gold:#a5854a;
+  --line:#ddd3bf;
+  --white:#fffdf8;
+  --shadow:0 2px 12px rgba(60,45,20,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.9;
+  font-size:16px;
+}
+a{color:var(--red);text-decoration:none}
+a:hover{color:var(--red-dark)}
+img{max-width:100%;display:block}
+.container{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* ---- 顶部 ---- */
+.top-ribbon{
+  background:#221e18;color:#c9bfa8;text-align:center;
+  font-size:13px;letter-spacing:6px;padding:7px 10px;
+}
+.header-main{
+  text-align:center;padding:34px 20px 26px;
+  background:linear-gradient(180deg,#fbf8f1,var(--paper));
+  border-bottom:1px solid var(--line);
+}
+.emblem{
+  width:64px;height:64px;margin:0 auto 12px;border-radius:50%;
+  background:radial-gradient(circle at 50% 38%,#8f2828,var(--red-dark));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 0 3px var(--paper),0 0 0 4.5px var(--gold);
+}
+.emblem svg{width:34px;height:34px;fill:#f3e6c2}
+.site-name{font-size:34px;letter-spacing:10px;font-weight:700;color:var(--ink)}
+.site-slogan{color:var(--ink-light);letter-spacing:4px;margin-top:6px;font-size:15px}
+.main-nav{
+  background:var(--red);display:flex;justify-content:center;flex-wrap:wrap;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+.main-nav a{
+  color:#f5ead2;padding:13px 34px;font-size:16px;letter-spacing:3px;
+  border-left:1px solid rgba(255,255,255,.12);transition:background .2s;
+}
+.main-nav a:last-child{border-right:1px solid rgba(255,255,255,.12)}
+.main-nav a:hover{background:var(--red-dark);color:#fff}
+.main-nav a.active{background:var(--red-dark);color:#fff;box-shadow:inset 0 -3px 0 var(--gold)}
+
+/* ---- 首页 hero ---- */
+.hero{
+  position:relative;color:#f0e8d8;text-align:center;
+  background:linear-gradient(180deg,#2b2620 0%,#3a332a 78%,#4540366 100%);
+  background-color:#332d24;
+  padding:78px 20px 0;overflow:hidden;
+}
+.hero .star{font-size:20px;color:var(--gold);letter-spacing:12px;margin-bottom:14px}
+.hero h2{font-size:40px;letter-spacing:12px;font-weight:700;text-shadow:0 2px 10px rgba(0,0,0,.4)}
+.hero p{margin-top:14px;color:#cfc4ab;letter-spacing:3px}
+.hero .monument{margin:40px auto 0;width:280px;opacity:.9}
+.hero .candle-line{display:flex;justify-content:center;gap:60px;padding:18px 0 26px;color:#d8cba6;font-size:14px;letter-spacing:2px}
+.hero .candle-line b{color:#f0dfae;font-size:20px;margin-left:6px}
+
+/* ---- 统计条 ---- */
+.stats{
+  display:flex;justify-content:center;flex-wrap:wrap;
+  background:var(--white);border-bottom:1px solid var(--line);
+}
+.stat{padding:22px 46px;text-align:center;border-left:1px solid var(--line)}
+.stat:first-child{border-left:none}
+.stat b{display:block;font-size:28px;color:var(--red)}
+.stat span{color:var(--ink-light);font-size:14px;letter-spacing:2px}
+
+/* ---- 区块 ---- */
+.section{padding:44px 0}
+.section-title{
+  text-align:center;font-size:26px;letter-spacing:8px;color:var(--ink);margin-bottom:8px;
+}
+.section-sub{
+  text-align:center;color:var(--gold);letter-spacing:4px;font-size:14px;margin-bottom:30px;
+}
+.section-sub::before,.section-sub::after{content:"❀";margin:0 12px;color:var(--line);color:#c8b98f}
+.section-alt{background:var(--paper-deep)}
+
+/* ---- 英烈卡片 ---- */
+.martyr-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:24px;
+}
+.martyr-card{
+  background:var(--white);border:1px solid var(--line);padding:22px 18px;
+  text-align:center;color:var(--ink);box-shadow:var(--shadow);
+  transition:transform .2s, box-shadow .2s;display:block;
+}
+.martyr-card:hover{transform:translateY(-4px);box-shadow:0 8px 22px rgba(60,45,20,.15);color:var(--ink)}
+.portrait{
+  width:128px;height:160px;margin:0 auto 14px;overflow:hidden;
+  border:1px solid var(--line);background:#e9e4d6;padding:5px;
+}
+.portrait img{width:100%;height:100%;object-fit:cover;filter:grayscale(100%) contrast(1.02)}
+.martyr-card h3{font-size:21px;letter-spacing:6px}
+.martyr-card .dates{color:var(--ink-light);font-size:14px;margin-top:2px}
+.martyr-card .title{color:var(--red);font-size:14px;margin-top:6px;letter-spacing:1px}
+.martyr-card .memorial{
+  margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);
+  color:var(--ink-light);font-size:13px;line-height:1.6;
+}
+.martyr-card .tribute-mini{margin-top:8px;color:#9a8f74;font-size:13px}
+
+/* ---- 搜索 ---- */
+.search-bar{display:flex;justify-content:center;gap:10px;margin-bottom:30px;flex-wrap:wrap}
+.search-bar input{
+  width:min(420px,80vw);padding:10px 16px;border:1px solid var(--line);
+  background:var(--white);font-family:inherit;font-size:15px;border-radius:2px;
+}
+.search-bar input:focus{outline:1px solid var(--gold)}
+.btn{
+  display:inline-block;background:var(--red);color:#f5ead2;border:none;cursor:pointer;
+  padding:10px 26px;font-size:15px;font-family:inherit;letter-spacing:3px;border-radius:2px;
+  transition:background .2s;
+}
+.btn:hover{background:var(--red-dark);color:#fff}
+.btn.ghost{background:transparent;border:1px solid var(--gold);color:var(--gold)}
+.btn.ghost:hover{background:var(--gold);color:#fff}
+
+/* ---- 详情页 ---- */
+.crumb{padding:18px 0 0;color:var(--ink-light);font-size:14px}
+.profile{
+  display:flex;gap:36px;background:var(--white);border:1px solid var(--line);
+  padding:34px;margin-top:16px;box-shadow:var(--shadow);flex-wrap:wrap;
+}
+.profile .portrait{width:210px;height:270px;margin:0;flex:none}
+.profile-info{flex:1;min-width:260px}
+.profile-info h2{font-size:32px;letter-spacing:8px}
+.profile-info .dates{color:var(--ink-light);margin:4px 0 14px;letter-spacing:2px}
+.info-table{width:100%;border-collapse:collapse;font-size:15px}
+.info-table td{padding:8px 6px;border-bottom:1px dashed var(--line);vertical-align:top}
+.info-table td:first-child{color:var(--ink-light);width:88px;letter-spacing:2px}
+.memorial-box{
+  margin-top:14px;background:#faf6ea;border:1px solid #e4d7b4;border-left:4px solid var(--gold);
+  padding:12px 16px;color:#7a6a3a;font-size:15px;
+}
+.tribute-bar{display:flex;gap:16px;margin-top:20px;flex-wrap:wrap}
+.tribute-btn{
+  flex:1;min-width:150px;border:1px solid var(--line);background:#fbf8f0;cursor:pointer;
+  padding:14px;text-align:center;font-family:inherit;font-size:16px;color:var(--ink);
+  border-radius:3px;transition:all .2s;
+}
+.tribute-btn:hover{border-color:var(--gold);background:#f6efdd}
+.tribute-btn:disabled{opacity:.55;cursor:not-allowed}
+.tribute-btn .ico{font-size:26px;display:block;margin-bottom:4px}
+.tribute-btn b{color:var(--red)}
+
+.detail-section{margin-top:34px}
+.detail-section>h3{
+  font-size:20px;letter-spacing:6px;color:var(--red);padding-bottom:8px;
+  border-bottom:2px solid var(--red);display:inline-block;margin-bottom:18px;
+}
+.prose{white-space:pre-wrap;text-indent:2em;font-size:16.5px}
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.photo-item{background:var(--white);border:1px solid var(--line);padding:8px;box-shadow:var(--shadow)}
+.photo-item img{width:100%;height:170px;object-fit:cover;filter:grayscale(100%)}
+.photo-item figcaption{font-size:13px;color:var(--ink-light);text-align:center;padding:6px 2px 2px}
+.empty-tip{color:var(--ink-light);text-align:center;padding:30px 0;letter-spacing:2px}
+
+/* ---- 文献 ---- */
+.doc-item{
+  background:var(--white);border:1px solid var(--line);margin-bottom:14px;box-shadow:var(--shadow);
+}
+.doc-head{
+  display:flex;align-items:center;gap:12px;padding:16px 20px;cursor:pointer;user-select:none;
+}
+.doc-head:hover{background:#faf7ee}
+.doc-cat{
+  flex:none;background:var(--red);color:#f5ead2;font-size:12px;padding:2px 10px;
+  letter-spacing:2px;border-radius:2px;
+}
+.doc-head h4{flex:1;font-size:17px;letter-spacing:1px}
+.doc-head .doc-who{color:var(--ink-light);font-size:13px;flex:none}
+.doc-head .arrow{color:var(--gold);transition:transform .2s;flex:none}
+.doc-item.open .doc-head .arrow{transform:rotate(90deg)}
+.doc-body{display:none;padding:0 24px 20px;border-top:1px dashed var(--line)}
+.doc-item.open .doc-body{display:block}
+.doc-body .prose{margin-top:14px}
+.doc-meta{color:var(--ink-light);font-size:13px;margin-top:12px;text-align:right}
+
+/* ---- 留言 ---- */
+.msg-form{
+  background:var(--white);border:1px solid var(--line);padding:26px;box-shadow:var(--shadow);
+}
+.msg-form .row{margin-bottom:14px}
+.msg-form label{display:block;margin-bottom:6px;color:var(--ink-light);letter-spacing:2px;font-size:14px}
+.msg-form input,.msg-form textarea,.msg-form select{
+  width:100%;padding:10px 14px;border:1px solid var(--line);background:#fff;
+  font-family:inherit;font-size:15px;border-radius:2px;
+}
+.msg-form textarea{min-height:110px;resize:vertical}
+.msg-form input:focus,.msg-form textarea:focus,.msg-form select:focus{outline:1px solid var(--gold)}
+.audit-notice{
+  background:#faf6ea;border:1px solid #e4d7b4;color:#7a6a3a;font-size:14px;
+  padding:10px 16px;margin-bottom:16px;letter-spacing:1px;
+}
+.msg-list{margin-top:34px}
+.msg-item{
+  background:var(--white);border:1px solid var(--line);border-left:4px solid var(--gold);
+  padding:18px 22px;margin-bottom:14px;box-shadow:var(--shadow);
+}
+.msg-item .content{font-size:16px}
+.msg-item .meta{
+  margin-top:10px;color:var(--ink-light);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;
+}
+.msg-item .meta .who{color:var(--red);letter-spacing:1px}
+
+/* ---- 页脚 ---- */
+footer{
+  margin-top:56px;background:#2a251e;color:#b7ab91;font-size:14px;
+}
+.footer-inner{
+  max-width:1080px;margin:0 auto;padding:38px 20px 26px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:26px;
+}
+.footer-inner h4{color:#e8ddc0;font-size:16px;letter-spacing:4px;margin-bottom:10px}
+.footer-inner p{line-height:2}
+.footer-inner a{color:#b7ab91}
+.footer-inner a:hover{color:#e8ddc0}
+.footer-bottom{
+  border-top:1px solid #443d31;padding:14px 20px;text-align:center;
+  display:flex;justify-content:center;gap:22px;flex-wrap:wrap;color:#948a70;
+}
+.footer-bottom a{color:#948a70}
+.footer-bottom a:hover{color:#e8ddc0}
+
+@media (max-width:640px){
+  .site-name{font-size:26px;letter-spacing:6px}
+  .hero h2{font-size:28px;letter-spacing:6px}
+  .main-nav a{padding:11px 18px;font-size:15px}
+  .stat{padding:16px 24px}
+  .profile{padding:22px}
+}

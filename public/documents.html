@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文献资料 - 英烈纪念园</title>
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">文献资料</h2>
+    <p class="section-sub">纸短情长 字见丹心</p>
+    <div id="doc-list"></div>
+  </div>
+</section>
+
+<footer id="site-footer"></footer>
+<script src="/js/common.js"></script>
+<script>
+(async function(){
+  await initLayout('/documents.html');
+  const docs = await fetchJSON('/api/documents');
+  document.getElementById('doc-list').innerHTML = docs.map(d=>`
+    <div class="doc-item">
+      <div class="doc-head" onclick="this.parentNode.classList.toggle('open')">
+        <span class="doc-cat">${esc(d.category)}</span>
+        <h4>${esc(d.title)}</h4>
+        <span class="doc-who">${d.martyr_name ? '相关人物：'+esc(d.martyr_name) : '综合资料'}</span>
+        <span class="arrow">▶</span>
+      </div>
+      <div class="doc-body">
+        <p class="prose">${esc(d.content)}</p>
+        <p class="doc-meta">收录时间：${esc(d.created_at)}</p>
+      </div>
+    </div>`).join('') || '<p class="empty-tip">暂无文献资料</p>';
+})().catch(e=>console.error(e));
+</script>
+</body>
+</html>

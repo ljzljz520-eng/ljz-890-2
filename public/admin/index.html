@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理后台 - 英烈纪念园</title>
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+<div class="admin-top">
+  <span class="logo">★ 英烈纪念园 · 管理后台</span>
+  <span class="spacer"></span>
+  <span id="admin-name" style="font-size:13px;color:#b7ab91"></span>
+  <a href="/" target="_blank">查看前台</a>
+  <a href="javascript:void(0)" id="logout">退出登录</a>
+</div>
+<div class="admin-wrap">
+  <aside class="admin-side" id="side">
+    <button data-tab="overview" class="active">概 览</button>
+    <button data-tab="martyrs">人物管理</button>
+    <button data-tab="photos">照片管理</button>
+    <button data-tab="documents">文献管理</button>
+    <button data-tab="messages">留言审核 <span class="badge" id="pending-badge" style="display:none"></span></button>
+    <button data-tab="recycle">回收站</button>
+    <button data-tab="settings">站点设置</button>
+    <button data-tab="backups">数据备份</button>
+    <button data-tab="password">修改密码</button>
+  </aside>
+  <main class="admin-main" id="main"></main>
+</div>
+<div class="modal-mask" id="modal-mask"><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast"></div>
+<script src="/admin/admin.js"></script>
+</body>
+</html>
